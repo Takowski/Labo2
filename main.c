@@ -1,67 +1,64 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <time.h>
 
 int genNumber();
-int* genTab(int sizeTab);
-void printTab(int *tab, int sizeTab);
-int* diffTab(int *tab1, int *tab2, int sizeTab1, int sizeTab2, int *resultSize);
 
-int main(void) {
+int *genTab(int size);
+
+int *diffTab(int *tab1, int *tab2, int size1, int size2, int *resultSize);
+
+void printTab(int *tab, int size);
+
+int main() {
     srand(time(NULL));
-
-    int sizeTab1 = 10;
-    int sizeTab2 = 15;
-    int *arr1 = genTab(sizeTab1);
-    int *arr2 = genTab(sizeTab2);
-
-    printf("Tab1: ");
-    printTab(arr1, sizeTab1);
-    printf("Tab2: ");
-    printTab(arr2, sizeTab2);
-
+    int size1 = 5;
+    int size2 = 10;
     int resultSize = 0;
-    int *tabResult = diffTab(arr1, arr2, sizeTab1, sizeTab2, &resultSize);
+    int *tab1 = genTab(size1);
+    int *tab2 = genTab(size2);
+    int *tabResult = diffTab(tab1, tab2, size1, size2, &resultSize);
 
-    printf("TabResult: ");
+    printTab(tab1, size1);
+    printTab(tab2, size2);
     printTab(tabResult, resultSize);
 
-    free(arr1);
-    free(arr2);
+    free(tab1);
+    free(tab2);
     free(tabResult);
-
     return 0;
 }
 
 int genNumber() {
-    return rand() % 100 + 1;
+    int Number = rand() % 100 + 1;
+    return Number;
 }
 
-int* genTab(int sizeTab) {
-    int *tab = malloc(sizeTab * sizeof(int));
-    for (int i = 0; i < sizeTab; i++) {
-        tab[i] = genNumber();
+int *genTab(int size) {
+    int *tab = (int *) malloc(sizeof(int) * size);
+    for (int i = 0; i < size; i++) {
+        *(tab + i) = genNumber(); // () obligatoire tenir compte de i dans le pointer
     }
     return tab;
 }
 
-int* diffTab(int *tab1, int *tab2, int sizeTab1, int sizeTab2, int *resultSize) {
-    int minsize = sizeTab1 < sizeTab2 ? sizeTab1 : sizeTab2;
-    int *result = NULL;
-    int count = 0;
-    for (int i = 0; i < minsize; i++) {
-        int diff = tab1[i] - tab2[i];
-        if (diff > 0) {
-            result = realloc(result, sizeof(int) * (count + 1));
-            result[count++] = diff;
+int *diffTab(int *tab1, int *tab2, int size1, int size2, int *resultSize) {
+    int counter = 0;
+    int *tabResult = (int *) malloc(sizeof(int) * size1);
+    for (int i = 0; i < size1; i++) {
+        int subtraction = *(tab1 + i) - *(tab2 + i);
+        if (subtraction > 0) {
+            *(tabResult + counter++) = subtraction;
         }
     }
-    *resultSize = count;
-    return result;
+    tabResult = (int *) realloc(tabResult, sizeof(int) * counter);
+    *resultSize = counter;
+
+    return tabResult;
 }
 
-void printTab(int *tab, int sizeTab) {
-    for (int i = 0; i < sizeTab; i++) {
+void printTab(int *tab, int size) {
+    for (int i = 0; i < size; i++) {
         printf("%d ", tab[i]);
     }
     printf("\n");
