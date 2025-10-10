@@ -14,7 +14,9 @@ int **genTab2D(int nSize, int mSize);
 
 void printTab2D(int **tab2d, int nSize, int mSize);
 
-int **mergeTab2d(int *tab1,int *tab2,int size1,int size2);
+int **mergeTab2d(int *tab1, int *tab2, int size1, int size2);
+
+int *convToTab1D(int **tab2d,int nSize,int mSize);
 
 int main() {
     srand(time(NULL));
@@ -28,13 +30,15 @@ int main() {
     int *tab2 = genTab(size2);
     int *tabResult = diffTab(tab1, tab2, size1, size2, &resultSize);
     int **tab2D = genTab2D(nDimension, mDimension);
-    int **tabMerged = mergeTab2d(tab1,tab2,size1,size2);
+    int **tabMerged = mergeTab2d(tab1, tab2, size1, size2);
+    int *tab1d=convToTab1D(tab2D,nDimension,mDimension);
 
     printTab(tab1, size1);
     printTab(tab2, size2);
     printTab(tabResult, resultSize);
     printTab2D(tab2D, nDimension, mDimension);
-    printTab2D(tabMerged, 2,size2);
+    printTab2D(tabMerged, 2, size2);
+    printTab(tab1d, (size1*size2));
 
     free(tab1);
     free(tab2);
@@ -46,6 +50,7 @@ int main() {
     for (int i = 0; i < 2; i++)
         free(tabMerged[i]);
     free(tabMerged);
+    free(tab1d);
     return 0;
 }
 
@@ -106,11 +111,11 @@ void printTab2D(int **tab2d, int nSize, int mSize) {
     }
 }
 
-int **mergeTab2d(int *tab1,int *tab2,int size1,int size2) {
+int **mergeTab2d(int *tab1, int *tab2, int size1, int size2) {
     if (size1 != size2) return NULL;
     int rows = 2;
-    int cols = (size1 + size2)/2;
-int **tabMerged = (int**)malloc(rows * sizeof(int*));
+    int cols = (size1 + size2) / 2;
+    int **tabMerged = (int **) malloc(rows * sizeof(int *));
     for (int i = 0; i < cols; i++) {
         tabMerged[i] = (int *) malloc(cols * sizeof(int));
     }
@@ -120,4 +125,16 @@ int **tabMerged = (int**)malloc(rows * sizeof(int*));
     }
 
     return tabMerged;
+}
+
+int *convToTab1D(int **tab2d, int nSize, int mSize) {
+    int size = nSize * mSize;
+    int *tab1d = (int *) malloc(size * sizeof(int));
+    int k = 0;
+    for (int i = 0; i < nSize; i++) {
+        for (int j = 0; j < mSize; j++) {
+            tab1d[k++] = tab2d[i][j];
+        }
+    }
+    return tab1d;
 }
