@@ -16,7 +16,9 @@ void printTab2D(int **tab2d, int nSize, int mSize);
 
 int **mergeTab2d(int *tab1, int *tab2, int size1, int size2);
 
-int *convToTab1D(int **tab2d,int nSize,int mSize);
+int *convToTab1D(int **tab2d, int nSize, int mSize);
+
+void printAddTab2D(int **tab2d, int nSize, int mSize);
 
 int main() {
     srand(time(NULL));
@@ -31,14 +33,21 @@ int main() {
     int *tabResult = diffTab(tab1, tab2, size1, size2, &resultSize);
     int **tab2D = genTab2D(nDimension, mDimension);
     int **tabMerged = mergeTab2d(tab1, tab2, size1, size2);
-    int *tab1d=convToTab1D(tab2D,nDimension,mDimension);
-
+    int *tab1d = convToTab1D(tab2D, nDimension, mDimension);
+printf("print tab 1\n");
     printTab(tab1, size1);
+    printf("print tab 2\n");
     printTab(tab2, size2);
+    printf("print tab result\n");
     printTab(tabResult, resultSize);
+    printf("print tab2d\n");
     printTab2D(tab2D, nDimension, mDimension);
+    printf("print tab2D avec addresse \n");
+    printAddTab2D(tab2D, nDimension, mDimension);
+    printf("print tab merged\n");
     printTab2D(tabMerged, 2, size2);
-    printTab(tab1d, (size1*size2));
+    printf("print tab 1D\n");
+    printTab(tab1d, (size1 * size2));
 
     free(tab1);
     free(tab2);
@@ -76,7 +85,7 @@ int *diffTab(int *tab1, int *tab2, int size1, int size2, int *resultSize) {
             *(tabResult + counter++) = subtraction;
         }
     }
-    tabResult = (int *) realloc(tabResult, sizeof(int) * counter);
+    tabResult = realloc(tabResult, sizeof(int) * counter);
     *resultSize = counter;
 
     return tabResult;
@@ -90,7 +99,7 @@ void printTab(int *tab, int size) {
 }
 
 int **genTab2D(int nSize, int mSize) {
-    int **tab2d = malloc(nSize * sizeof(int *));
+    int **tab2d = malloc(nSize * sizeof(int *)); //pointer de pointer de int
     for (int i = 0; i < nSize; i++)
         tab2d[i] = malloc(mSize * sizeof(int));
     for (int i = 0; i < nSize; i++) {
@@ -109,6 +118,15 @@ void printTab2D(int **tab2d, int nSize, int mSize) {
         }
         printf("\n");
     }
+}
+
+void printAddTab2D(int **tab2d, int nSize, int mSize) {
+    for (int i = 0; i < nSize; i++) {
+        for (int j = 0; j < mSize; j++) {
+            printf("%d ", *(*(tab2d + i)+ j));// j vient ajouter la valeur d'un int
+        }
+    }
+    printf("\n");
 }
 
 int **mergeTab2d(int *tab1, int *tab2, int size1, int size2) {
