@@ -34,7 +34,8 @@ int main() {
     int **tab2D = genTab2D(nDimension, mDimension);
     int **tabMerged = mergeTab2d(tab1, tab2, size1, size2);
     int *tab1d = convToTab1D(tab2D, nDimension, mDimension);
-printf("print tab 1\n");
+
+    printf("print tab 1\n");
     printTab(tab1, size1);
     printf("print tab 2\n");
     printTab(tab2, size2);
@@ -123,7 +124,7 @@ void printTab2D(int **tab2d, int nSize, int mSize) {
 void printAddTab2D(int **tab2d, int nSize, int mSize) {
     for (int i = 0; i < nSize; i++) {
         for (int j = 0; j < mSize; j++) {
-            printf("%d ", *(*(tab2d + i)+ j));// j vient ajouter la valeur d'un int
+            printf("%d ", *(*(tab2d + i) + j)); // j vient ajouter la valeur d'un int
         }
     }
     printf("\n");
